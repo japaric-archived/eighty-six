@@ -2,6 +2,11 @@ language: rust
 
 rust: nightly
 
+addons:
+  apt:
+    packages:
+      - libssh2-1
+
 install:
   - export PATH="$PATH:$(rustc --print sysroot)/cargo/bin"
   - curl -sf "https://raw.githubusercontent.com/japaric/rust-everywhere/master/install.sh" | bash -s -- --from japaric/xargo

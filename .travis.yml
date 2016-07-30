@@ -8,6 +8,7 @@ addons:
       - libssh2-1
 
 install:
+  - sudo apt-get install grub-common
   - export PATH="$PATH:$(rustc --print sysroot)/cargo/bin"
   - curl -sf "https://raw.githubusercontent.com/japaric/rust-everywhere/master/install.sh" | bash -s -- --from japaric/xargo
 
@@ -17,6 +18,7 @@ script:
   - readelf -hS target/x86_64/release/kernel
   - objdump -pCD target/x86_64/release/kernel
   - size target/x86_64/release/kernel
+  - ./mk-iso.sh
 
 branches:
   only:

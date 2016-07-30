@@ -1,0 +1,25 @@
+language: rust
+
+rust: nightly
+
+install:
+  - export PATH="$PATH:$(rustc --print sysroot)/cargo/bin"
+  - curl -sf "https://raw.githubusercontent.com/japaric/rust-everywhere/master/install.sh" | bash -s -- --from japaric/xargo
+
+script:
+  - xargo build --target x86_64
+  - xargo build --target x86_64 --release
+  - readelf -hS target/x86_64/release/kernel
+  - objdump -pCD target/x86_64/release/kernel
+  - size target/x86_64/release/kernel
+
+branches:
+  only:
+    - auto
+    - master
+    - try
+
+notifications:
+  email:
+    on_success: never
+  webhooks: https://homu.herokuapp.com/travis

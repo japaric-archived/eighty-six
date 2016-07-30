@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
       - libssh2-1
+      - xorriso
 
 install:
   - sudo apt-get install grub-common

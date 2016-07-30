@@ -1,4 +1,5 @@
 [package]
 authors = ["Jorge Aparicio <japaricious@gmail.com>"]
+build = "build.rs"
 name = "kernel"
 version = "0.1.0"

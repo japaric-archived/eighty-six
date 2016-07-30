@@ -44,6 +44,65 @@ $ xargo build --target x86_64
 
 [Xargo]: https://crates.io/crates/xargo
 
+### `lld`
+
+To explore the suitability of `lld` as a (in-memory) Rust linker, I'll first try to use `lld` as a
+external linker just like `cc` is used today. This is going to require modifying the linker
+arguments that Rust passes to `cc`:
+
+```
+$ xargo rustc --target x86_64 --release -- -C linker=false
+"false"
+"-Tlayout.ld"
+"-Wl,-n"
+"-nostartfiles"
+"-L" "/home/japaric/.xargo/lib/rustlib/x86_64/lib"
+"/home/japaric/rust/eighty-six/target/x86_64/release/kernel.0.o"
+"-o" "/home/japaric/rust/eighty-six/target/x86_64/release/kernel"
+"-Wl,--gc-sections"
+"-nodefaultlibs"
+"-L" "/home/japaric/rust/eighty-six/target/x86_64/release"
+"-L" "/home/japaric/rust/eighty-six/target/x86_64/release/deps"
+"-L" "/home/japaric/rust/eighty-six/target/release/build/kernel-46b9540e8875ea07/out"
+"-L" "/home/japaric/.xargo/lib/rustlib/x86_64/lib"
+"-Wl,-Bstatic"
+"-Wl,--whole-archive"
+"-l" "boot"
+"-Wl,--no-whole-archive"
+"-Wl,-Bdynamic"
+"/home/japaric/.xargo/lib/rustlib/x86_64/lib/libcore-1f21818448cb9abf.rlib"
+```
+
+A few arguments need to be dropped because they are (a) no longer necessary (`-nostartfiles`,
+`-nodefaultlibs`) or (b) not implemented by `lld` (`-Wl,-n` -- note this flag doesn't come from
+`rustc` itself; it's an arbitrary flag requested by the target specification). Also, `-Wl` needs to
+be removed from the arguments that have it as a prefix. The rest of arguments can be passed as is:
+
+```
+$ ld.lld
+"-Tlayout.ld"
+"-L" "/home/japaric/.xargo/lib/rustlib/x86_64/lib"
+"/home/japaric/rust/eighty-six/target/x86_64/release/kernel.0.o"
+"-o" "/home/japaric/rust/eighty-six/target/x86_64/release/kernel"
+"--gc-sections"
+"-L" "/home/japaric/rust/eighty-six/target/x86_64/release"
+"-L" "/home/japaric/rust/eighty-six/target/x86_64/release/deps"
+"-L" "/home/japaric/rust/eighty-six/target/release/build/kernel-46b9540e8875ea07/out"
+"-L" "/home/japaric/.xargo/lib/rustlib/x86_64/lib"
+"-Bstatic"
+"--whole-archive"
+"-l" "boot"
+"--no-whole-archive"
+"-Bdynamic"
+"/home/japaric/.xargo/lib/rustlib/x86_64/lib/libcore-1f21818448cb9abf.rlib"
+```
+
+Inspecting the resulting binary indicates that it's equivalent to the one produced by `cc`. The
+binary also works as expected under QEMU.
+
+The next step would be to add a e.g. `-Z use-lld` flag to `rustc` that (a) calls an external `lld`
+to begin with or (b) calls `lld` as a library, but with the tweaked linker ags.
+
 ## License
 
 Licensed under either of

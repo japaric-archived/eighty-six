@@ -6,7 +6,7 @@
 use core::ptr;
 
 #[no_mangle]
-pub fn start() {
+pub fn _start() {
     unsafe {
         ptr::write_volatile(0xb8000 as *mut u16, 0x0248); // H
         ptr::write_volatile(0xb8002 as *mut u16, 0x0265); // e

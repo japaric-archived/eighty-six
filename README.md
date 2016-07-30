@@ -17,9 +17,10 @@ make use of Makefiles and external assembly files to build their kernels, and I 
 I have another goal: I'd love the replace `rustc` dependence on an external linker (usually `gcc`)
 with a [`lld`] that's embedded in `rustc` itself. The x86 kernel dev space is an excellent testing
 ground for this as its "executables" (the kernels) are free of C dependencies (libraries, startup
-objects, etc.).
+objects, etc.). Check the [lld branch] for more details.
 
 [`lld`]: http://lld.llvm.org/
+[lld branch]: https://github.com/japaric/eighty-six/tree/lld#lld
 
 ## Progress
 

@@ -21,7 +21,6 @@ script:
 branches:
   only:
     - auto
-    - master
     - try
 
 notifications:

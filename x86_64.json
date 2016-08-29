@@ -7,6 +7,7 @@
   "no-compiler-rt": true,
   "os": "none",
   "pre-link-args": ["-Tlayout.ld", "-Wl,-n", "-nostartfiles"],
+  "pre-lld-args": ["-Tlayout.ld"],
   "target-endian": "little",
   "target-pointer-width": "64"
 }

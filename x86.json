@@ -1,12 +1,11 @@
 {
-  "arch": "x86_64",
-  "cpu": "i386",
-  "data-layout": "e-m:e-i64:64-f80:128-n8:16:32:64-S128",
+  "arch": "x86",
+  "data-layout": "e-m:e-p:32:32-f64:32:64-f80:32-n8:16:32-S128",
   "executables": true,
-  "llvm-target": "x86_64",
+  "llvm-target": "i386",
   "no-compiler-rt": true,
   "os": "none",
   "pre-link-args": ["-m32", "-Tlayout.ld", "-Wl,-n", "-nostartfiles"],
   "target-endian": "little",
-  "target-pointer-width": "64"
+  "target-pointer-width": "32"
 }

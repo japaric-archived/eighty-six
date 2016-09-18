@@ -24,6 +24,8 @@ objects, etc.). Check the [lld branch] for more details.
 
 ## Progress
 
+This section is written in journal style and in chronological order.
+
 ### Chapter 3
 
 I've just finished [Chapter 3], and my "kernel" prints "Hello, world!" to the screen and does
@@ -44,6 +46,23 @@ $ xargo build --target x86_64
 - `core` is not explicitly build. [Xargo] takes care of compiling it without user intervention.
 
 [Xargo]: https://crates.io/crates/xargo
+
+### Chapter 4
+
+We are now in long mode :tada:. Notable changes:
+
+- We were always emitting 64-bit instructions even though we are only supposed to use 32-bit
+  instructions because we start in restricted mode :scream_cat:. This has been fixed by changing the
+  target specification from a 64-bit target (`x86_64.json`) to a 32-bit one (`x86.json`).
+- All the data layout related stuff that intermezzos does in assembly has been implemented in the
+  linker script to reduce the amount of assembly. Notably, the layout of the page tables and the GDT
+  are done in the linker script.
+- Linking the page tables is done in pure Rust :+1;.
+- Actually entering long mode requires manipulation of (control) registers and those can't be
+  accessed via pure Rust, AFAIK. For that reason, this part is written in inline assembly.
+- Caveat: Because we are telling `rustc` to use a 32-bit target, `rustc` always emit 32-bit
+  instructions and we can't actually use 64-bit instructions/registers in the section of the program
+  where the CPU is already in long mode. Yikes, I'll have to think about how to solve this.
 
 ## License
 

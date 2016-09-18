@@ -14,11 +14,11 @@ install:
   - curl -sf "https://raw.githubusercontent.com/japaric/rust-everywhere/master/install.sh" | bash -s -- --from japaric/xargo
 
 script:
-  - xargo build --target x86_64
-  - xargo build --target x86_64 --release
-  - readelf -hS target/x86_64/release/kernel
-  - objdump -pCD target/x86_64/release/kernel
-  - size target/x86_64/release/kernel
+  - xargo build --target x86
+  - xargo build --target x86 --release
+  - readelf -hS target/x86/release/kernel
+  - objdump -pCD target/x86/release/kernel
+  - size target/x86/release/kernel
   - ./mk-iso.sh
 
 branches:

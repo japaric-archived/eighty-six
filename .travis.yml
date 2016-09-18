@@ -14,7 +14,6 @@ install:
   - curl -sf "https://raw.githubusercontent.com/japaric/rust-everywhere/master/install.sh" | bash -s -- --from japaric/xargo
 
 script:
-  - xargo build --target x86
   - xargo build --target x86 --release
   - readelf -hS target/x86/release/kernel
   - objdump -pCD target/x86/release/kernel
